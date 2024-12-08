@@ -43,13 +43,11 @@ int main() {
         //Power Saving Mode
         if(batvol <= 3.5) {
             eps.shut_down_regulator();
+            gs.printf("Power saving mode ON\r\n"); 
             flag = 1;
-        } else {
+        } else if((flag == 1) & (batvol > 3.7)) {
             eps.turn_on_regulator();
             flag = 0;
-        }
-        if(flag == 1) {
-            gs.printf("Power saving mode ON\r\n"); 
         }
         //Contents of command
         if (cmdflag == 1) {
