@@ -30,14 +30,14 @@ void initialize()
 int main() {
     gs.printf("From Sat : Operation Start...\r\n");
     int flag = 0;     // condition
-    float sattime=0.0,batvol,temp; //Voltage, Temerature
+    float batvol,temp; //Voltage, Temerature
     receive(rcmd,cmdflag); //interupting by ground station command
-    
+    sattime.start();
     for(int i = 0; i < 100; i++) {
         //Sensing and Transmitting HK data
         eps.vol(&batvol);
         temp = 28.5;
-        gs.printf("HEPTASAT::Condition = %d, Time = %f [s], BatVol = %.2f [V],Temp = %.2f [C]\r\n",flag,sattime,batvol,temp);
+        gs.printf("HEPTASAT::Condition = %d, Time = %f [s], BatVol = %.2f [V],Temp = %.2f [C]\r\n",flag,sattime.read(),batvol,temp);
         //Condition
         cond[0] = 1;
         //Power Saving Mode
@@ -57,7 +57,7 @@ int main() {
                for(int j=0;j<5;j++){
                 gs.printf("HEPTASAT::Hello World!\r\n");
                 cond[0] = 0;
-                wait(1);
+                wait_ms(1000);
                 cond[0] = 1;
                }
             }
@@ -72,9 +72,10 @@ int main() {
         }
         
         //Operation Interval
-        wait(1.0);
-        sattime = sattime+1.0;
+        wait_ms(1000);
     }
+    cond[0] = 0;
+    sattime.stop();
     gs.printf("From Sat : Operation Stop...\r\n");
 }
            
